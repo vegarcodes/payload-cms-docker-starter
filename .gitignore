@@ -33,3 +33,7 @@ next-env.d.ts
 # env files for Payload and Postgres
 payload.env
 postgres.env
+.env
+
+# SQLite databases
+*.db

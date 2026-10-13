@@ -1,15 +1,28 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
-import sharp from 'sharp'
+import { sqliteAdapter } from '@payloadcms/db-sqlite';
+import { postgresAdapter } from '@payloadcms/db-postgres';
+import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import path from 'path';
+import { buildConfig } from 'payload';
+import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
+import { Users } from './collections/Users';
+import { Media } from './collections/Media';
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const sqlite = sqliteAdapter({
+  client: {
+    url: process.env.DATABASE_URL || '',
+  },
+});
+
+const postgres = postgresAdapter({
+  pool: {
+    connectionString: process.env.DATABASE_URL || '',
+  },
+});
 
 export default buildConfig({
   admin: {
@@ -24,11 +37,7 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
-  }),
+  db: process.env.DATABASE_URL?.includes("postgres://") ? postgres : sqlite,
   sharp,
   plugins: [],
-})
+});
