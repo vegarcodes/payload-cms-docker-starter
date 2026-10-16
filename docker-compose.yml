@@ -1,19 +1,12 @@
 services:
   payload:
-    image: node:24-alpine
+    build: .
     ports:
       - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare npm@latest --activate && npm install && npm run dev"
     depends_on:
       - postgres
-    environment:
-      - USE_DATABASE=postgres
-      - DATABASE_URL=postgres://postgres:mittpostgrespassord12345@postgres:5432/mitt-cms
-      - PAYLOAD_SECRET=f5f7f7037db54eb457232a66
+    env_file:
+      - .env
 
   postgres:
     restart: always
@@ -22,11 +15,8 @@ services:
       - pgdata:/var/lib/postgresql
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mittpostgrespassord12345
-      - POSTGRES_DB=mitt-cms
+    env_file:
+      - .env
 
 volumes:
   pgdata:
-  node_modules:
