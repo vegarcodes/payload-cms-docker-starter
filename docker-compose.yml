@@ -7,6 +7,8 @@ services:
       - postgres
     env_file:
       - .env
+    volumes:
+      - media:/app/media
 
   postgres:
     restart: always
@@ -19,4 +21,5 @@ services:
       - .env
 
 volumes:
+  media:
   pgdata:
