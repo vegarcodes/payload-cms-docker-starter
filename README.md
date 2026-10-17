@@ -33,3 +33,5 @@ For å lage et produksjonsbygg som kjører i en container, skal du bruke kommand
 ### Kjør migrasjoner
 
 Når du har gjort endringer i content collections, må du lage en migrasjonsfil slik at applikasjonen vet hvordan den skal gjøre endringer i databasen for å matche dette. Kjør kommandoen `npm run migrate:create` for å lage en migrasjonsfil. Migrasjoner blir kjørt automatisk i produksjon når containeren starter på nytt, hvis den ser at det er behov for dette.
+
+Les mer i [Payloads dokumentasjon om migrasjoner](https://payloadcms.com/docs/database/migrations), spesielt avsnittet om arbeidsflyten når man jobber mot en Postgres-database, for mer informasjon om hvordan det er lurt å lage og kjøre migrasjoner.
