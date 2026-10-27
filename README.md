@@ -1,10 +1,9 @@
-# Payload CMS + Docker starterprosjekt
+# Payload CMS + Docker starterprosjekt (versjon 1.1.0)
 
-Dette repositoryet inneholder en tilpasset variant av Payload sin starter-template, spesifikt ment for å brukes til å lage en Docker-container som kan kjøres. 
+Dette repositoryet inneholder en tilpasset variant av Payload sin starter-template, der vi bruker Docker til å lage en PostgreSQL-database i en container. Dette gjør at det er raskt og enkelt å komme i gang med prosjektet. I tillegg kan Docker brukes til å lage produksjonsklare containere, slik at når du skal ut i produksjon med det du har laget, er det enkelt å komme i gang.
 
 Du må ha Docker Desktop, eventuelt Docker Engine om du kjører Linux, installert på din maskin for å bygge og kjøre dette prosjektet. Du må fylle ut alle miljøvariablene nevnt i `.env.example` for at dette skal fungere; for kjøring lokalt på din egen maskin kan du lage en fil kalt `.env`, mens for produksjonssetting bør du bruke hostingplattformens foretrukne måte å legge inn miljøvariabler. 
 
-Når alt er riktig satt opp har du Payload CMS og en tilknyttet Postgres-database kjørende i Docker-containere. For produksjonsmiljøer settes filopplastinger opp slik at de legges i et Docker-volum; for utviklingsmiljøer legges filopplastinger i en statisk mappe i prosjektet. Dersom du lager flere innholdssamlinger der filer kan lastes opp, må du selv besørge at disse filene havner i riktige mapper og/eller volumer.
 
 ## Instruksjoner
 
@@ -20,11 +19,12 @@ Når alt er riktig satt opp har du Payload CMS og en tilknyttet Postgres-databas
 
 ### Jobbe med prosjektet lokalt
 
-Når du skal jobbe med prosjektet på din egen maskin, skal du bruke Docker Compose i stedet for å skrive `npm run dev`. Gjør følgende:
+Når du skal jobbe med prosjektet på din egen maskin, skal du bruke Docker til å starte databasecontaineren, og Node.js + npm til å starte Payload CMS-applikasjonen.
 
++ Før du begynner må du ha laget en `.env`-fil og installert avhengigheter med `npm install`.
 + Naviger deg til prosjektmappa i terminalen din.
-+ Kjør kommandoen `docker compose up` for å bygge og starte prosjektet i en container. Du vil da se hva som kommer i loggene; dersom du ikke har behov for dette, kan du heller kjøre `docker compose up -d` for å kjøre den i detached mode.
-+ For å stoppe containeren, kjør `docker compose down`.
++ Kjør kommandoen `docker compose up -d` for å starte databasecontaineren. Denne lages automatisk hvis den ikke finnes fra før. For å stoppe databasecontaineren, kjør `docker compose down`.
++ Når databasecontaineren har startet, kan du kjøre `npm run dev` for å starte Payload CMS sin utviklingsserver. Når denne kjører, kan du starte å jobbe med koding og utvikling som du vanligvis gjør i et Next.js-prosjekt.
 
 ### Lag et produksjonsbygg
 
@@ -35,3 +35,9 @@ For å lage et produksjonsbygg som kjører i en container, skal du bruke kommand
 Når du har gjort endringer i content collections, må du lage en migrasjonsfil slik at applikasjonen vet hvordan den skal gjøre endringer i databasen for å matche dette. Kjør kommandoen `npm run migrate:create` for å lage en migrasjonsfil. Migrasjoner blir kjørt automatisk i produksjon når containeren starter på nytt, hvis den ser at det er behov for dette.
 
 Les mer i [Payloads dokumentasjon om migrasjoner](https://payloadcms.com/docs/database/migrations), spesielt avsnittet om arbeidsflyten når man jobber mot en Postgres-database, for mer informasjon om hvordan det er lurt å lage og kjøre migrasjoner.
+
+## Forskjeller mellom versjon 1.0.0 og 1.1.0
+
+Dersom du går inn i `package.json` kan du se hvilken versjon av starteren du kjører, forutsatt at du ikke har endret dette feltet selv.
+
+Hvis du kjører en starter som har versjon 1.0.0, og du vil oppgradere til 1.1.0, se på filene `compose.yaml` og `.env.example` for å se hvilke endringer som er gjort. `compose.yaml` er betraktelig mindre i den nye versjonen, mens `.env.example` inneholder en miljøvariabel du bare skal kopiere uten å endre. Utover dette skal prosjektet fungere likt.

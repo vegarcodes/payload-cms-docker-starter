@@ -1,19 +1,4 @@
 services:
-  payload:
-    image: node:24-alpine
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "npm install && npm run dev"
-    depends_on:
-      - postgres
-    environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      - PAYLOAD_SECRET=${PAYLOAD_SECRET}
-
   postgres:
     restart: always
     image: postgres:18
@@ -28,4 +13,3 @@ services:
 
 volumes:
   postgres_dev:
-  node_modules:
